@@ -1,0 +1,22 @@
+version: '3.5'
+services: 
+  postgres: 
+    image: 'postgres'
+    container_name: 'nest_dev_relations'
+    environment: 
+      POSTGRES_DB: 'nestDevRelations'
+      POSTGRES_USER: 'nestDevRelations'
+      POSTGRES_PASSWORD: 'nestDevRelations'
+      ALLOW_IP_RANGE: '0.0.0.0/0'
+    ports:
+      - '5432:5432'
+  postgresTest:
+    image: 'postgres'
+    container_name: 'nest_dev_relations'
+    environment: 
+      POSTGRES_DB: 'nestDevRelations'
+      POSTGRES_USER: 'nestDevRelations'
+      POSTGRES_PASSWORD: 'nestDevRelations'
+      ALLOW_IP_RANGE: '0.0.0.0/0'
+    ports:
+      - '5432:5432'

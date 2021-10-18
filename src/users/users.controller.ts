@@ -6,14 +6,19 @@ import {
   Patch,
   Param,
   Delete,
+  Logger,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AppController } from 'src/app.controller';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  //logger
+  private readonly logger = new Logger(AppController.name);
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {

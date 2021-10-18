@@ -6,22 +6,25 @@ export class CreateUserDto {
     @IsNotEmpty()
     name: string;
 
+    @IsNotEmpty()
+    surname: string;
+
     @IsEmail()
     email: string;
 
     @IsNotEmpty()
-    genere: string;
-
-    @IsNotEmpty()
-    education: string;
-
-    @IsNotEmpty()
-    birhyear: string;
+    rangeAge: string;
 
     @IsNotEmpty()
     country: string;
 
-    @IsOptional()
-    points:number;
+    @IsNotEmpty()
+    total: number;
+
+    @IsNotEmpty()
+    blockAB: number;
+
+    @IsNotEmpty()
+    blockCDE: number;
 
 }

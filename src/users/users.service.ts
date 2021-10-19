@@ -5,6 +5,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
+
+import { Cron } from '@nestjs/schedule';
+
+//cron
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -32,4 +37,21 @@ export class UsersService {
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
+
+  async findUser(){
+    return await this.userRepository.find({paid:false});
+  }
+
+  @Cron('10 * * * * *') //every minute at 10 second
+  async handleCron() {
+    const users =  await this.findUser();
+    
+    users.forEach(user => {
+      console.log(user);
+    });
+
+    console.log('Called when the current second is 10');
+
+  }
+
 }

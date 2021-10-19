@@ -30,5 +30,11 @@ export class User {
     @Column({nullable: false})
     blockCDE: number;
 
+    @Column({nullable: false})
+    paid: boolean;
+
+    @Column({nullable: false})
+    timeStamp: Date;
+
 
 }

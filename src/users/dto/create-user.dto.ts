@@ -27,4 +27,10 @@ export class CreateUserDto {
     @IsNotEmpty()
     blockCDE: number;
 
+    @IsNotEmpty()
+    paid: boolean;
+
+    @IsNotEmpty()
+    timeStamp: Date;    
+
 }

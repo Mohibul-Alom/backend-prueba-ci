@@ -31,8 +31,21 @@ export class UsersService {
     return this.userRepository.findOne(id);
   }
 
+  async findByEmail(email: string) {
+    return await this.userRepository.findOne(email);
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
-    return await this.userRepository.update(id, updateUserDto);
+
+    const user = await this.userRepository.preload({
+      id, 
+      ...updateUserDto
+    });
+    if(!user){
+      throw new Error("User with id"+id+" does not exist");
+    }
+    return this.userRepository.save(user);
+
   }
 
   remove(id: number) {
@@ -49,17 +62,16 @@ export class UsersService {
 
     if (users.length > 0) {
       users.forEach(async (user) => {
-        console.log(user);
-
         const minutes = this.calcMinDiff(user.timeStamp);
 
         if (minutes >= 10) {
-          console.log('sending email to the user...');
+          console.log('sending email to the user: ',user.email);
           const updateUser: UpdateUserDto = { ...user };
           updateUser.mailRequired = false;
 
           await this.update(user.id, updateUser);
-          await this.mailService.sendOffer(user);
+          //TODO: enable email sent
+          //await this.mailService.sendOffer(user);
           console.log('Email has already sent!');
         }
       });

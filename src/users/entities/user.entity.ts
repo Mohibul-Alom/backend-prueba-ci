@@ -39,5 +39,8 @@ export class User {
     @Column({nullable: false, default: "false"})
     mailRequired: boolean;
 
+    @Column({nullable:true})
+    plan:number;
+
 
 }

@@ -36,4 +36,6 @@ export class CreateUserDto {
     @IsNotEmpty()
     mailRequired: boolean;
 
+    @IsOptional()
+    plan: number;
 }

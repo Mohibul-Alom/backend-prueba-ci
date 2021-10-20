@@ -13,7 +13,7 @@ export class MailService {
     await this.mailerService.sendMail({
         to:user.email,
         subject:'Disount of 15%',
-        template:'./discount', // Error: ENOENT: no such file or directory, open '/Users/mohibul/Desktop/Soamee/backend-prueba-ci/dist/src/mail/templates/discount.hbs'
+        template:'./discount', 
         context:{
             name:user.name,
             url,
@@ -23,9 +23,3 @@ export class MailService {
 
 }
 
-
-
-// import { Injectable } from '@nestjs/common';
-
-// @Injectable()
-// export class MailService {}

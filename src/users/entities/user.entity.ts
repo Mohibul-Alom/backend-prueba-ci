@@ -36,5 +36,8 @@ export class User {
     @Column({nullable: false})
     timeStamp: Date;
 
+    @Column({nullable: false, default: "false"})
+    mailRequired: boolean;
+
 
 }

@@ -31,6 +31,9 @@ export class CreateUserDto {
     paid: boolean;
 
     @IsNotEmpty()
-    timeStamp: Date;    
+    timeStamp: Date;
+    
+    @IsNotEmpty()
+    mailRequired: boolean;
 
 }

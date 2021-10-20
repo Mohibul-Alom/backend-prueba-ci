@@ -1,10 +1,9 @@
-import { Injectable, } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-
 
 //cron
 import { Cron } from '@nestjs/schedule';
@@ -17,9 +16,8 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private mailService: MailService,
-  ) // private readonly toolsService: ToolsService,
-  {}
+    private mailService: MailService, // private readonly toolsService: ToolsService,
+  ) {}
 
   create(createUserDto: CreateUserDto) {
     return this.userRepository.save(createUserDto);
@@ -33,44 +31,52 @@ export class UsersService {
     return this.userRepository.findOne(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    return await this.userRepository.update(id, updateUserDto);
   }
 
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
 
-  async findUser(){
-    return await this.userRepository.find({paid:false});
+  async findUser() {
+    return await this.userRepository.find({ paid: false, mailRequired: true });
   }
 
-  @Cron('10 * * * * *') //every minute at 10 second
+  @Cron('*/10 * * * * *') //every minute at 10 second
   async handleCron() {
-    const users =  await this.findUser();
-    
-    users.forEach(async(user) => {
-      console.log(user);
-      const minutes = this.calcMinDiff(user.timeStamp);
+    const users = await this.findUser();
 
-      if(minutes >= 10){
-        //await this.mailService.sendOffer(user);
-      }
-    });
+    if (users.length > 0) {
+      users.forEach(async (user) => {
+        console.log(user);
 
+        const minutes = this.calcMinDiff(user.timeStamp);
+
+        if (minutes >= 10) {
+          console.log('sending email to the user...');
+          const updateUser: UpdateUserDto = { ...user };
+          updateUser.mailRequired = false;
+
+          await this.update(user.id, updateUser);
+          await this.mailService.sendOffer(user);
+          console.log('Email has already sent!');
+        }
+      });
+    }
   }
 
-  private calcMinDiff(timeStamp:Date):Number {
+  private calcMinDiff(timeStamp: Date): Number {
+    const userDate: Date = new Date(timeStamp);
 
-    const userDate: number = new Date(timeStamp).getTime();
+    const currentDate: Date = new Date();
 
-    const currentDate: number = new Date().getTime();
-    
-    const diff = ((((currentDate - userDate) % 86400000) % 3600000) / 60000);
+    const oneMin = 60 * 1000;
 
-    console.log(diff);
-    
+    const diff = Math.round(
+      Math.abs(<any>currentDate - <any>userDate) / oneMin,
+    );
+
     return diff;
   }
-
 }

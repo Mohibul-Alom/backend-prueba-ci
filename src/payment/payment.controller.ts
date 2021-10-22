@@ -49,8 +49,6 @@ export class PaymentController {
   async checkout(@Body() body: { idPlan: number; quantity: number; idUser:number }) {
     const { idPlan, quantity,idUser } = body;
 
-    console.log(idUser);
-
     let productId:string = "";
 
 

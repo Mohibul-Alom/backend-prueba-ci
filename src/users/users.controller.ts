@@ -34,13 +34,11 @@ export class UsersController {
   
   @Get('/email/:email')
   findByEmail(@Param('email') email: string) {
-    console.log('findByEmail-->',email)
     return this.usersService.findByEmail(email);
   }
   
   @Get('/id/:id')
   findOne(@Param("id") id:number) {
-    console.log("id--->",id)
     return this.usersService.findOne(id);
   }
 

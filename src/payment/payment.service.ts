@@ -37,8 +37,6 @@ export class PaymentService {
 
   async checkout(productId:string, quantity:number,idUser:number){
 
-    console.log("servicio checkout-->",productId, quantity);
-
     const session = await this.stripeClient.checkout.sessions.create({
       success_url: `${process.env.FRONTEND_URL}/result?idUser=${idUser}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.FRONTEND_URL}/plan?idUser=${idUser}`,

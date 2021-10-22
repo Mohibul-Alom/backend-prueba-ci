@@ -24,33 +24,48 @@ export class PaymentController {
     return this.paymentService.create(createPaymentDto);
   }
 
-  @Post('/checkout')
-  async checkout(@Body() body: { idPlan: number; quantity: number }) {
-    const { idPlan, quantity } = body;
-    console.log('/checkout-->', idPlan, quantity);
-    return await this.paymentService.checkout(
-      process.env.PRICE_PLAN_LOW,
-      quantity,
-    );
-  }
-
   @Get()
   findAll() {
     return this.paymentService.findAll();
   }
-
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.paymentService.findOne(+id);
   }
-
+  
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
     return this.paymentService.update(+id, updatePaymentDto);
   }
-
+  
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.paymentService.remove(+id);
   }
+
+  //create session and return session Id
+  @Post('/checkout')
+  async checkout(@Body() body: { idPlan: number; quantity: number; idUser:number }) {
+    const { idPlan, quantity,idUser } = body;
+
+    console.log(idUser);
+
+    let productId:string = "";
+
+
+    if(idPlan === 1) productId = process.env.PRICE_PLAN_LOW;
+    if(idPlan === 2) productId = process.env.PRICE_PLAN_MEDIUM;
+    if(idPlan === 3) productId = process.env.PRICE_PLAN_HIGH;
+
+    return await this.paymentService.checkout(
+      productId,
+      quantity,
+      idUser,
+    );
+  }
+
+
+
+
 }

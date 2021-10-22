@@ -28,11 +28,11 @@ export class UsersService {
   }
 
   findOne(id: number) {
-    return this.userRepository.findOne(id);
+    return this.userRepository.findOne({id: id});
   }
 
   async findByEmail(email: string) {
-    return await this.userRepository.findOne(email);
+    return await this.userRepository.findOne({email: email});
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

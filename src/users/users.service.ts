@@ -28,24 +28,22 @@ export class UsersService {
   }
 
   findOne(id: number) {
-    return this.userRepository.findOne({id: id});
+    return this.userRepository.findOne({ id: id });
   }
 
   async findByEmail(email: string) {
-    return await this.userRepository.findOne({email: email});
+    return await this.userRepository.findOne({ email: email });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-
     const user = await this.userRepository.preload({
-      id, 
-      ...updateUserDto
+      id,
+      ...updateUserDto,
     });
-    if(!user){
-      throw new Error("User with id"+id+" does not exist");
+    if (!user) {
+      throw new Error('User with id' + id + ' does not exist');
     }
     return this.userRepository.save(user);
-
   }
 
   remove(id: number) {
@@ -65,13 +63,13 @@ export class UsersService {
         const minutes = this.calcMinDiff(user.timeStamp);
 
         if (minutes >= 10) {
-          console.log('sending email to the user: ',user.email);
+          console.log('sending email to the user: ', user.email);
           const updateUser: UpdateUserDto = { ...user };
           updateUser.mailRequired = false;
 
           await this.update(user.id, updateUser);
           //TODO: enable email sent
-          //await this.mailService.sendOffer(user);
+          await this.mailService.sendOffer(user);
           console.log('Email has already sent!');
         }
       });
